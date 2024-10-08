@@ -1,1 +1,33 @@
+name: Deploy Worker and Bot
 
+on:
+  push:
+    branches:
+      - main  # Ganti dengan nama cabang yang Anda gunakan
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # Ganti dengan versi Python yang Anda gunakan
+
+    - name: Install dependencies
+      run: |
+        pip install pyTelegramBotAPI
+
+    - name: Run Bot
+      run: |
+        python bot.py &
+        sleep 10  # Tunggu sejenak agar bot berjalan
+
+    - name: Deploy Worker
+      run: |
+        npm install -g wrangler
+        wrangler publish --env production  # Sesuaikan dengan nama lingkungan Anda
