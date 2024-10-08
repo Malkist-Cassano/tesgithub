@@ -3,7 +3,7 @@ name: Deploy Worker and Bot
 on:
   push:
     branches:
-      - main  # Ganti dengan nama cabang yang Anda gunakan
+      - main
 
 jobs:
   deploy:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'  # Ganti dengan versi Python yang Anda gunakan
+        python-version: '3.8'
 
     - name: Install Python dependencies
       run: |
@@ -25,16 +25,18 @@ jobs:
     - name: Run Bot
       run: |
         python bot.py &
-        sleep 10  # Tunggu sejenak agar bot berjalan
+        sleep 10
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'  # Ganti dengan versi Node.js yang Anda gunakan
+        node-version: '16'
 
     - name: Install Wrangler
       run: npm install -g wrangler
 
     - name: Deploy Worker
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       run: |
-        wrangler deploy --env production  # Sesuaikan dengan nama lingkungan Anda
+        wrangler deploy --env production
